@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Web3 Site</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+</head>
+<body>
+  <h1>My Web3 Website</h1>
+  <button id="connect">Connect Wallet</button>
+  <p id="wallet"></p>
+
+  <script>
+    const connectBtn = document.getElementById('connect');
+    const walletP = document.getElementById('wallet');
+
+    connectBtn.onclick = async () => {
+      if (window.ethereum) {
+        try {
+          const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+          walletP.innerText = 'Connected wallet: ' + accounts[0];
+        } catch (err) {
+          walletP.innerText = 'User rejected connection';
+        }
+      } else {
+        walletP.innerText = 'MetaMask not found. Please install it!';
+      }
+    };
+  </script>
+</body>
+</html>
