@@ -1,0 +1,874 @@
+/*
+ * Дизайн система на Aurum.
+ *
+ * Тъмна по подразбиране — металът се чете най-добре на тъмен фон.
+ * Всички цветове минават през токени, за да може светла тема да се добави,
+ * без да се пипа нито един компонент.
+ */
+
+:root {
+  /* Повърхности */
+  --surface-0: #0a0a0d;
+  --surface-1: #121218;
+  --surface-2: #1a1a22;
+  --surface-3: #23232d;
+
+  /* Мастило */
+  --ink-primary: #f5f3ef;
+  --ink-secondary: #a8a49c;
+  --ink-muted: #6f6c66;
+
+  /* Акцент — злато */
+  --gold-100: #f7e7bd;
+  --gold-300: #e3c479;
+  --gold-500: #c9a24a;
+  --gold-700: #8f6f2c;
+
+  /* Статуси */
+  --good: #4ea87a;
+  --critical: #d4685f;
+
+  /* Граници и ефекти */
+  --line: #2a2a34;
+  --line-strong: #3a3a46;
+  --radius: 14px;
+  --radius-lg: 22px;
+
+  --shell: min(1180px, 100% - 40px);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-0);
+  color: var(--ink-primary);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+}
+h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+h3 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-300);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Числата в таблици и салда не бива да "танцуват" при смяна на стойността. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Оформление ---------- */
+
+.shell {
+  width: var(--shell);
+  margin-inline: auto;
+}
+
+.section {
+  padding: clamp(64px, 9vw, 120px) 0;
+}
+
+.section-head {
+  max-width: 620px;
+  margin-bottom: 48px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--gold-300);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lede {
+  margin-top: 18px;
+  color: var(--ink-secondary);
+  font-size: 1.08rem;
+}
+
+/* ---------- Бутони ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold-300), var(--gold-500));
+  color: #1a1408;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--gold-100), var(--gold-300));
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: var(--line-strong);
+  color: var(--ink-primary);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--gold-500);
+  color: var(--gold-100);
+}
+
+.btn-sm {
+  padding: 9px 16px;
+  font-size: 0.86rem;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ---------- Карти ---------- */
+
+.card {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 720px) {
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 980px) {
+  .grid-3-lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ---------- Навигация ---------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--surface-0) 82%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: 68px;
+}
+
+.nav-links {
+  display: none;
+  gap: 26px;
+  margin-inline-start: auto;
+  color: var(--ink-secondary);
+  font-size: 0.92rem;
+}
+
+.nav-links a:hover {
+  color: var(--ink-primary);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+  margin-inline-start: auto;
+}
+
+@media (min-width: 900px) {
+  .nav-links {
+    display: flex;
+  }
+  .nav-actions {
+    margin-inline-start: 0;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.16rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px, 8vw, 96px) 0 clamp(64px, 9vw, 110px);
+}
+
+/* Мек златист ореол зад заглавието — чисто CSS, без изображения. */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: -30% 40% 30% -20%;
+  background: radial-gradient(
+    circle at 40% 50%,
+    rgba(201, 162, 74, 0.18),
+    transparent 62%
+  );
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  display: grid;
+  gap: 52px;
+  align-items: center;
+}
+
+@media (min-width: 980px) {
+  .hero-inner {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-top: 44px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+}
+
+/* ---------- Визия на картата ---------- */
+
+.gold-card {
+  position: relative;
+  aspect-ratio: 1.586;
+  width: min(420px, 100%);
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 20px;
+  border: 1px solid rgba(247, 231, 189, 0.22);
+  background: linear-gradient(135deg, #2a2213 0%, #4a3a1c 42%, #1a160c 100%);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+
+/* Диагонален отблясък, който имитира полирана метална повърхност. */
+.gold-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(247, 231, 189, 0.16) 46%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.gold-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.gold-card-brand {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gold-100);
+}
+
+.gold-card-balance {
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--gold-100);
+}
+
+.gold-card-sub {
+  color: rgba(247, 231, 189, 0.62);
+  font-size: 0.82rem;
+}
+
+.gold-card-number {
+  font-size: 1.02rem;
+  letter-spacing: 0.16em;
+  color: rgba(247, 231, 189, 0.78);
+}
+
+/* ---------- Ценови тикер ---------- */
+
+.ticker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 18px;
+}
+
+.ticker-price {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.delta-up {
+  background: rgba(78, 168, 122, 0.14);
+  color: var(--good);
+}
+
+.delta-down {
+  background: rgba(212, 104, 95, 0.14);
+  color: var(--critical);
+}
+
+/* ---------- Стъпки ---------- */
+
+.step {
+  position: relative;
+  padding-left: 56px;
+}
+
+.step-number {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-700);
+  background: var(--surface-2);
+  color: var(--gold-300);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.steps {
+  display: grid;
+  gap: 34px;
+}
+
+@media (min-width: 860px) {
+  .steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 48px;
+  }
+}
+
+/* ---------- Функционалности ---------- */
+
+.feature-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--gold-300);
+}
+
+/* ---------- Планове ---------- */
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.plan-featured {
+  border-color: var(--gold-700);
+  background: linear-gradient(
+    180deg,
+    rgba(201, 162, 74, 0.08),
+    var(--surface-1) 55%
+  );
+}
+
+.plan-price {
+  font-size: 2.1rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.plan-perks {
+  display: grid;
+  gap: 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-secondary);
+  font-size: 0.93rem;
+}
+
+.plan-perks li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.plan-perks svg {
+  flex: none;
+  margin-top: 4px;
+  color: var(--gold-500);
+}
+
+.badge {
+  align-self: flex-start;
+  padding: 3px 11px;
+  border-radius: 999px;
+  background: var(--gold-500);
+  color: #1a1408;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- FAQ ---------- */
+
+.faq-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-item summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 0;
+  font-size: 1.04rem;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: '+';
+  flex: none;
+  color: var(--gold-300);
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.faq-item[open] summary::after {
+  content: '−';
+}
+
+.faq-answer {
+  padding-bottom: 24px;
+  color: var(--ink-secondary);
+  max-width: 68ch;
+}
+
+/* ---------- Подвал ---------- */
+
+.footer {
+  padding: 56px 0 40px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+}
+
+.disclaimer {
+  margin-top: 26px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  color: var(--ink-secondary);
+  font-size: 0.86rem;
+  max-width: 76ch;
+}
+
+/* ---------- Демо приложение ---------- */
+
+.demo {
+  padding: 40px 0 90px;
+}
+
+.demo-grid {
+  display: grid;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (min-width: 980px) {
+  .demo-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+}
+
+.phone {
+  width: min(390px, 100%);
+  margin-inline: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 34px;
+  background: var(--surface-1);
+  padding: 20px 18px;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+}
+
+.balance-big {
+  font-size: 2.6rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.tx {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.tx:last-child {
+  border-bottom: none;
+}
+
+.tx-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--gold-300);
+}
+
+.tx-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.tx-title {
+  font-size: 0.94rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-meta {
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+}
+
+.tx-amounts {
+  text-align: right;
+  flex: none;
+}
+
+.muted {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+}
+
+.secondary {
+  color: var(--ink-secondary);
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  color: var(--ink-secondary);
+  font-size: 0.86rem;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  color: var(--ink-primary);
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.input:focus {
+  border-color: var(--gold-500);
+  outline: none;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-secondary);
+  font-size: 0.86rem;
+}
+
+.chip:hover {
+  border-color: var(--gold-500);
+  color: var(--gold-100);
+}
+
+.chip-active {
+  border-color: var(--gold-500);
+  background: rgba(201, 162, 74, 0.14);
+  color: var(--gold-100);
+}
+
+.quote-box {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  font-size: 0.88rem;
+}
+
+.error {
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  background: rgba(212, 104, 95, 0.12);
+  border: 1px solid rgba(212, 104, 95, 0.4);
+  color: #f0b3ae;
+  font-size: 0.87rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  padding: 5px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.tab {
+  flex: 1;
+  padding: 9px 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.tab-active {
+  background: var(--surface-3);
+  color: var(--ink-primary);
+}
+
+/* ---------- Графика ---------- */
+
+.chart {
+  width: 100%;
+  display: block;
+  touch-action: none;
+}
+
+.chart-grid line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--gold-300);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-crosshair {
+  stroke: var(--ink-muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.chart-marker {
+  fill: var(--gold-300);
+  /* 2px пръстен в цвета на повърхността отделя точката от линията. */
+  stroke: var(--surface-1);
+  stroke-width: 2;
+}
+
+.chart-axis {
+  fill: var(--ink-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  padding: 8px 11px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface-3);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.8);
+  transform: translate(-50%, -120%);
+  z-index: 5;
+}
+
+.chart-wrap {
+  position: relative;
+}
+
+/* ---------- Достъпност ---------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

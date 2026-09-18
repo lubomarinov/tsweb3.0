@@ -1,30 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Simple Web3 Site</title>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
-</head>
-<body>
-  <h1>My Web3 Website</h1>
-  <button id="connect">Connect Wallet</button>
-  <p id="wallet"></p>
-
-  <script>
-    const connectBtn = document.getElementById('connect');
-    const walletP = document.getElementById('wallet');
-
-    connectBtn.onclick = async () => {
-      if (window.ethereum) {
-        try {
-          const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-          walletP.innerText = 'Connected wallet: ' + accounts[0];
-        } catch (err) {
-          walletP.innerText = 'User rejected connection';
-        }
-      } else {
-        walletP.innerText = 'MetaMask not found. Please install it!';
-      }
-    };
-  </script>
-</body>
+<!doctype html>
+<html lang="bg">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aurum — злато-обезпечена сметка и карта</title>
+    <meta
+      name="description"
+      content="Зареждаш евро, държиш злато. Картата продава метал по курса в момента на плащането. Демонстрационен проект."
+    />
+    <meta name="theme-color" content="#0a0a0d" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
