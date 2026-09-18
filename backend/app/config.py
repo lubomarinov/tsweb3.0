@@ -37,7 +37,11 @@ class Settings:
         default_factory=lambda: tuple(
             origin.strip()
             for origin in os.environ.get(
-                "FEXOGOLD_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+                # 5173 е `vite dev`, 4173 е `vite preview` — и двата се ползват
+                # при разработка, затова и двата са разрешени по подразбиране.
+                "FEXOGOLD_CORS_ORIGINS",
+                "http://localhost:5173,http://127.0.0.1:5173"
+                ",http://localhost:4173,http://127.0.0.1:4173",
             ).split(",")
             if origin.strip()
         )

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import contextlib
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
@@ -10,15 +12,44 @@ from fastapi.responses import JSONResponse
 
 from .config import BRAND_NAME, settings
 from .db import create_all
+from .deps import get_price_source
+from .domain.gold import SimulatedGoldPriceSource
 from .domain.ledger import LedgerError
 from .routers import account, auth, price
+
+#: През колко секунди се придвижва симулираната цена.
+PRICE_TICK_SECONDS = 4.0
+
+
+async def _tick_prices() -> None:
+    """Придвижва симулирания курс, докато процесът е жив.
+
+    Без това котировката стои неподвижна и демото изглежда счупено: цената
+    не мърда, а нереализираният резултат никога не се променя. Реален
+    доставчик би бутал котировки сам и тази задача отпада.
+    """
+    source = get_price_source()
+    if not isinstance(source, SimulatedGoldPriceSource):
+        return
+
+    while True:
+        await asyncio.sleep(PRICE_TICK_SECONDS)
+        source.tick()
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     settings.validate_for_production()
     create_all()
-    yield
+
+    ticker = asyncio.create_task(_tick_prices())
+    try:
+        yield
+    finally:
+        ticker.cancel()
+        # Изчакваме отказа, за да не остане висяща задача при спиране.
+        with contextlib.suppress(asyncio.CancelledError):
+            await ticker
 
 
 app = FastAPI(
