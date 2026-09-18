@@ -115,7 +115,7 @@ export function DemoApp({ onBack }: DemoAppProps) {
         <div className="row" style={{ marginBottom: 20, flexWrap: 'wrap' }}>
           <div>
             <span className="eyebrow">Демо</span>
-            <h2>Симулатор на {BRAND.name}</h2>
+            <h2>{BRAND.name}</h2>
             <p className="muted" style={{ marginTop: 6 }}>
               Симулирани котировки и салда. Никакви реални пари не се движат.
             </p>
