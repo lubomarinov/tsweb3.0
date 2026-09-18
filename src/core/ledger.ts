@@ -90,16 +90,22 @@ const nextId = (): string => {
   return `tx_${sequence.toString(36)}_${Date.now().toString(36)}`;
 };
 
-/** Колко микрограма злато се получават за дадена сума по дадена цена за грам. */
+/**
+ * Колко микрограма злато се получават за дадена сума по дадена цена за грам.
+ *
+ * Умножаваме ПРЕДИ да разделим: така делението е единствената операция със
+ * закръгляне и резултатът е същият като на сървъра, който смята с цели числа.
+ * Междинната стойност е под 2^53, защото зареждането е с горен лимит.
+ */
 export function goldForAmount(amount: Cents, pricePerGram: Cents): Micrograms {
   if (pricePerGram <= 0) return 0;
   // Закръгляме НАДОЛУ — платформата никога не издава злато, което не е купила.
-  return Math.floor((amount / pricePerGram) * MICROGRAMS_PER_GRAM);
+  return Math.floor((amount * MICROGRAMS_PER_GRAM) / pricePerGram);
 }
 
 /** Колко евроцента струва дадено количество злато по дадена цена за грам. */
 export function amountForGold(gold: Micrograms, pricePerGram: Cents): Cents {
-  return Math.round((gold / MICROGRAMS_PER_GRAM) * pricePerGram);
+  return Math.round((gold * pricePerGram) / MICROGRAMS_PER_GRAM);
 }
 
 /** Пазарна стойност на сметката, ако се ликвидира сега (по bid цената). */
@@ -202,7 +208,7 @@ export function cardPayment(
   const fee = feeOf(chargeable, FEES.cardOverLimit);
 
   const total = amount + fee;
-  const requiredGold = Math.ceil((total / quote.bidPerGram) * MICROGRAMS_PER_GRAM);
+  const requiredGold = Math.ceil((total * MICROGRAMS_PER_GRAM) / quote.bidPerGram);
 
   if (requiredGold > account.gold) {
     return {

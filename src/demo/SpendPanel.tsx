@@ -38,7 +38,7 @@ export function SpendPanel({ account, quote, onSubmit }: SpendPanelProps) {
   const fee = Math.ceil(chargeable * FEES.cardOverLimit);
   const goldNeeded =
     cents > 0
-      ? Math.ceil(((cents + fee) / quote.bidPerGram) * MICROGRAMS_PER_GRAM)
+      ? Math.ceil(((cents + fee) * MICROGRAMS_PER_GRAM) / quote.bidPerGram)
       : 0;
 
   const enough = goldNeeded > 0 && goldNeeded <= account.gold;

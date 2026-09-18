@@ -1,4 +1,5 @@
 import { formatEur, formatGrams } from '../core/format';
+import { BRAND } from '../core/content';
 import type { Cents, Micrograms } from '../core/money';
 
 /**
@@ -20,7 +21,7 @@ export function GoldCardVisual({
   return (
     <div className="gold-card">
       <div className="gold-card-top">
-        <span className="gold-card-brand">Aurum</span>
+        <span className="gold-card-brand">{BRAND.name}</span>
         <span className="gold-card-sub">999,9</span>
       </div>
 
